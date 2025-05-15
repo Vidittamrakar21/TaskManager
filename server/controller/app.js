@@ -1,37 +1,148 @@
+const Task = require('../model/task');
 
 
-// follow the below pattern for creating controllers for a particular  endpoint
 
-const firstapi = (req,res)=>{
+const createTask = async (req,res)=>{
 
     try {
 
-        //Write down the api logic here 
+        const {uid,title, task} =req.body;
 
-        res.json({message: "this is  first api"})
+        const data = await Task.create({uid, title, task});
+     
+        if(data){
+
+            res.json({message: "New task added", data:data});
+        }
+        else{
+            
+            res.json({message: "Something went wrong!"})
+        }
         
     } catch (error) {
         res.json(error)
     }
 }
 
-const gqlfirstapi = (id)=>{
+
+const findAllTasks = async (req,res)=>{
 
     try {
 
-        //Write down the gql api logic here 
 
-       
+        const data = await Task.find();
+     
+        if(data){
 
-       return  `this is  first api ${id}`;
+            res.json({data:data});
+        }
+        else{
+            
+            res.json({message: "Something went wrong!"})
+        }
         
     } catch (error) {
+        res.json(error)
+    }
+}
 
-       return error;
+
+const findUserTasks = async (req,res)=>{
+
+    try {
+
+        const id = req.params.id;
+
+        const data = await Task.find({uid:id});
+     
+        if(data){
+
+            res.json({data:data});
+        }
+        else{
+            
+            res.json({message: "Something went wrong!"})
+        }
+        
+    } catch (error) {
+        res.json(error)
     }
 }
 
 
 
 
-module.exports = {firstapi, gqlfirstapi}; //export all the controllers declared above 
+const findOneTask = async (req,res)=>{
+
+    try {
+
+        const id = req.params.id;
+
+        const data = await Task.findOne({_id:id});
+     
+        if(data){
+
+            res.json({data:data});
+        }
+        else{
+            
+            res.json({message: "Something went wrong!"})
+        }
+        
+    } catch (error) {
+        res.json(error)
+    }
+}
+
+
+const updateTask = async (req,res)=>{
+
+    try {
+
+        const id = req.params.id;
+        const {title, task} =req.body;
+
+        const data = await Task.findOneAndUpdate({_id:id},{title: title, task:task});
+     
+        if(data){
+
+            res.json({message: "Task Edited!"});
+        }
+        else{
+            
+            res.json({message: "Something went wrong!"})
+        }
+        
+    } catch (error) {
+        res.json(error)
+    }
+}
+
+const deleteTask = async (req,res)=>{
+
+    try {
+
+        const id = req.params.id;
+    
+
+        const data = await Task.findOneAndDelete({_id:id});
+     
+        if(data){
+
+            res.json({message: "Task Deleted!"});
+        }
+        else{
+            
+            res.json({message: "Something went wrong!"})
+        }
+        
+    } catch (error) {
+        res.json(error)
+    }
+}
+
+
+
+
+
+module.exports = {createTask, findAllTasks ,findOneTask, findUserTasks ,updateTask, deleteTask}; 

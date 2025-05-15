@@ -1,12 +1,17 @@
 const  express =  require('express');
-
+const aunthenticateJWT = require('../middleware/authMiddleware');
 const router = express.Router();
 
 
-const {firstapi} = require('../controller/app')//import controllers from controller directory
-
-// follow below pattern for creating the routes 
-router.route('/first').get(firstapi);   //use it by declaring a specific route for it, using different http methods.
+const {createTask , findAllTasks, findOneTask, findUserTasks , updateTask,deleteTask} = require('../controller/app')
 
 
-module.exports = router; // exporting router
+router.route('/tasks').post(createTask);   
+router.route('/tasks').get(aunthenticateJWT,findAllTasks);   
+router.route('/tasks/:id').get(findOneTask);   
+router.route('/tasks/:id').put(updateTask);   
+router.route('/tasks/:id').delete(deleteTask);   
+router.route('/usertasks/:id').get(findUserTasks);   
+
+
+module.exports = router; 

@@ -4,11 +4,11 @@ const morgan =  require('morgan');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
-//import all the routes  declared in the routes directory.
 
-const healthroute = require('./routes/test.js')
 
-const apiroute =  require('./routes/app.js')
+const authRoute = require('./routes/auth.js')
+
+const apiRoute =  require('./routes/app.js')
 
 
 
@@ -28,28 +28,26 @@ async function init (){
     }
 
     
-//entry point
+
 
 app.get('/', (req,res)=>{
     try {
         
-        res.json({message: "Welcome To ServoBase , Server is running !"})
+        res.json({message: "Welcome To TaskManager , Server is running !"})
     } catch (error) {
         res.json(error)
     }
 })
 
 
-//use the routes that are imported above
 
-app.use('/test', healthroute);
-app.use('/api', apiroute);
+
+app.use('/api/auth', authRoute);
+app.use('/api', apiRoute);
 
 
 
 app.listen(5000, ()=>{
-
-    //app will start running on port 8080, you can change the port according to your need .
 
     console.log("server started")
 })
