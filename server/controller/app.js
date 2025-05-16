@@ -1,5 +1,5 @@
 const Task = require('../model/task');
-
+const jwt = require('jsonwebtoken');
 
 
 const createTask = async (req,res)=>{
@@ -28,7 +28,6 @@ const createTask = async (req,res)=>{
 const findAllTasks = async (req,res)=>{
 
     try {
-
 
         const data = await Task.find();
      
@@ -124,7 +123,6 @@ const deleteTask = async (req,res)=>{
 
         const id = req.params.id;
     
-
         const data = await Task.findOneAndDelete({_id:id});
      
         if(data){
@@ -141,8 +139,18 @@ const deleteTask = async (req,res)=>{
     }
 }
 
+const verifyToken = (req,res)=>{
+
+    const token = req.params.id;
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.json({message:'unauthorized'}); // invalid token
+  
+        res.json({user:user});
+        
+      });
+}
 
 
 
 
-module.exports = {createTask, findAllTasks ,findOneTask, findUserTasks ,updateTask, deleteTask}; 
+module.exports = {createTask, findAllTasks ,findOneTask, findUserTasks ,updateTask, deleteTask ,verifyToken}; 

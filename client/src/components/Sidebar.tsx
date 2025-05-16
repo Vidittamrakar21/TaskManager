@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useState ,useEffect} from 'react'
 import { useNavigate, useLocation} from 'react-router-dom'
 
@@ -6,7 +6,7 @@ import { useNavigate, useLocation} from 'react-router-dom'
 export default function Sidebar() {
     const [active,setActive] = useState('/dashboard')
     const navigate = useNavigate();
-
+    const userName = localStorage.getItem('name')
     function navigateDashboard(){
         setActive('/dashboard')
         navigate('/dashboard')
@@ -15,6 +15,12 @@ export default function Sidebar() {
     function navigateCreateTask(){
         setActive('/add-task')
         navigate('/add-task')
+    }
+
+    function logout(){
+      localStorage.clear();
+      navigate('/login')
+      
     }
 
     const location = useLocation();
@@ -43,7 +49,7 @@ export default function Sidebar() {
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#AD49E7" className='ml-3' viewBox="0 0 16 16">
         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
         </svg>
-        <h1 className='text-white text-[18px] ml-3'>Vidit Tamrakar</h1>
+        <h1 className='text-white text-[18px] ml-3'>{userName}</h1>
         </div>
 
 
@@ -65,7 +71,7 @@ export default function Sidebar() {
         </div>
 
 
-        <div className='flex items-center justify-start w-[250px] h-[35px] mt-5  rounded-md hover:bg-[#80808034]'>
+        <div onClick={logout} className='flex items-center justify-start w-[250px] h-[35px] mt-5  rounded-md hover:bg-[#80808034]'>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" className="ml-3" viewBox="0 0 16 16">
         <path d="M7.5 1v7h1V1z"/>
         <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812"/>

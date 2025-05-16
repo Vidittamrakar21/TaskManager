@@ -1,6 +1,7 @@
 import { useRef , useState } from "react"
 import { useNavigate } from "react-router-dom"
-
+import { PropagateLoader } from "react-spinners";
+import axios from "axios";
 
 export default function Login (){
 
@@ -10,13 +11,54 @@ export default function Login (){
   const [loading , setloading] = useState(false);
 
   const navigate_home = () =>{
-    navigate('/')
+    navigate('/dashboard')
   }
   
   const navigate_login = () =>{
     navigate('/register')
   }
 
+  function isValidEmail(email:string) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
+  
+
+  const handleLogin = async ()=>{
+
+    setloading(true)
+
+    if(!(emailinp.current?.value &&  passinp.current?.value)){
+
+      alert("All the fields are required!")
+      setloading(false)
+    }
+    else if(isValidEmail(emailinp.current?.value)===true){
+    
+
+      //@ts-ignore
+      const userData = await (await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`,{email:emailinp.current?.value , password:passinp.current?.value })).data;
+
+      if(userData.token){
+        localStorage.setItem('token', userData.token)
+        localStorage.setItem('email', userData.user.email)
+        localStorage.setItem('name', userData.user.name)
+        alert(userData.message);
+        navigate_home();
+        setloading(false)
+     
+    }
+    else{
+      alert(userData.message);
+      setloading(false)
+    }
+
+   }
+    else{
+      alert("Invalid Email !");
+      setloading(false)
+    }
+  }
   
 
   
@@ -38,8 +80,9 @@ export default function Login (){
             <h1 className="text-[white] font-[500] text-[18px] mt-[20px]">Login To Your Account</h1>
             <input ref={emailinp} type="text" placeholder="&nbsp; Email" className="h-[40px] w-[400px] sm1:w-[310px] bg-[#494949af] rounded-md text-[white] mt-[40px]" />
             <input ref={passinp} type="password" placeholder="&nbsp; Password" className="h-[40px] w-[400px] sm1:w-[310px] bg-[#494949af] rounded-md text-[white] mt-[40px]" />
-            <button  className="h-[40px] w-[400px] bg-[#AD49E7] cursor-pointer rounded-md text-[white] sm1:w-[310px] mt-[40px]">Login</button>
+            <button onClick={handleLogin}  className="h-[40px] w-[400px] bg-[#AD49E7] cursor-pointer rounded-md text-[white] sm1:w-[310px] mt-[40px]">Login</button>
           
+            <PropagateLoader color="#AD49E7" className="mt-3" loading={loading} />
            
 
             <h3 className="text-[gray] cursor-pointer mt-[50px]">Don't have an account ? <span onClick={navigate_login} className="text-[white]">SignUp</span></h3>

@@ -1,4 +1,4 @@
-import {createBrowserRouter , RouterProvider} from 'react-router-dom'
+import {createBrowserRouter , RouterProvider, Navigate} from 'react-router-dom'
 import './App.css'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -10,6 +10,10 @@ import EditTask from './pages/Edit-Task'
 function App() {
 
   const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Navigate to="/login" replace />
+    },
     {
       path: '/login',
       element: <Login/>
@@ -36,17 +40,13 @@ function App() {
   ])
 
   return (
-  
-
 
       <div>
   
       <RouterProvider router={router}/>
      
       </div>
-      
-
-    
+ 
   )
 }
 

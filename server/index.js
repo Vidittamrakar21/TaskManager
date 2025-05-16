@@ -40,11 +40,8 @@ app.get('/', (req,res)=>{
 })
 
 
-
-
 app.use('/api/auth', authRoute);
 app.use('/api', apiRoute);
-
 
 
 app.listen(5000, ()=>{

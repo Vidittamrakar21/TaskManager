@@ -40,8 +40,6 @@ const registerUser = async (req,res)=>{
                         res.json({message: "Something went wrong!",})
                     }
 
-               
-
             }
        }
         
